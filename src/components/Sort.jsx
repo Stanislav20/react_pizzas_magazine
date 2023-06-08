@@ -1,15 +1,18 @@
 import { useState } from 'react'
 
-function Sort() {
+function Sort({ selectedSort, onClickSort }) {
 	const [openSort, setOpenSort] = useState(false)
-	const [selectedSort, setSelectedSort] = useState(0)
 
-	const listSort = ['популярности', 'цене', 'алфавиту']
-	const selectNameSort = listSort[selectedSort]
+	const listSort = [{name:'популярности (по убыв)', sortProperty:'raiting'},
+										{name:'популярности (по возр)', sortProperty:'-raiting'},
+										{name:'цене (по убыв)', sortProperty:'price'},
+										{name:'цене (по возр)', sortProperty:'-price'},
+										{name:'алфавиту (по убыв)', sortProperty: 'title'},
+										{name:'алфавиту (по возр)', sortProperty: '-title'}]
 
-	const hiddenSort = (i) => {
+	const hiddenSort = (obj) => {
 		setOpenSort(!openSort)
-		setSelectedSort(i)
+		onClickSort(obj)
 	}
 
 	return (
@@ -19,19 +22,21 @@ function Sort() {
         	<path d="M10 5C10 5.16927 9.93815 5.31576 9.81445 5.43945C9.69075 5.56315 9.54427 5.625 9.375 5.625H0.625C0.455729 5.625 0.309245 5.56315 0.185547 5.43945C0.061849 5.31576 0 5.16927 0 5C0 4.83073 0.061849 4.68424 0.185547 4.56055L4.56055 0.185547C4.68424 0.061849 4.83073 0 5 0C5.16927 0 5.31576 0.061849 5.43945 0.185547L9.81445 4.56055C9.93815 4.68424 10 4.83073 10 5Z" fill="#2C2C2C"/>
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOpenSort(!openSort)} >{selectNameSort}</span>
+        <span onClick={() => setOpenSort(!openSort)}>{selectedSort.name}</span>
       </div>
-      {
-				openSort && (
-					<div className="sort__popup">
-        <ul>
-					{
-						listSort.map((nameSort, i) => <li key={i} onClick={() => hiddenSort(i)} className={selectedSort === i ? 'active' : ''}>{nameSort}</li>)
-					}
-        </ul>
-      </div>
-				)
-			}
+      {openSort && (
+				<div className="sort__popup">
+        	<ul>
+						{listSort.map((obj, i) => 
+							<li key={i} 
+									onClick={() => hiddenSort(obj)} 
+									className={selectedSort.sortProperty === obj.sortProperty ? 'active' : ''}> 
+								{obj.name}
+							</li>
+						)}
+        	</ul>
+      	</div>
+			)}
     </div>
 	)
 }

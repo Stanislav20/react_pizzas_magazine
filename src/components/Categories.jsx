@@ -1,19 +1,15 @@
-import { useState } from 'react';
-
 const arrCategories = ['все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые']
 
-function Categories() {
-	const [activeIndexCategory, setActiveIndexCategory] = useState(0)
-
-	const onClickCategory = (index) => {
-		setActiveIndexCategory(index)
-	}
+function Categories({ activeIndexCategory, onClickCategory }) {
 
 	return (
 		<div className="categories">
 			<ul>
 				{
-					arrCategories.map((value, index) => (<li key={index} onClick={() => onClickCategory(index)} className={activeIndexCategory === index ? 'active' : ''}>{value}</li>))
+					arrCategories.map((value, index) => 
+					  (<li key={index} 
+							onClick={() => onClickCategory(index)} 
+							className={activeIndexCategory === index ? 'active' : ''}>{value}</li>))
 				}
       </ul>
     </div>

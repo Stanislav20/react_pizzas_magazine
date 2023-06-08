@@ -9,21 +9,35 @@ import PizzaSkeleton from '../components/pizzaBlock/PizzaSkeleton'
 function Home() {
 	const [itemsPizzas, setItemsPizzas] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
+	const [activeIndexCategory, setActiveIndexCategory] = useState(0)
+	const [selectedSort, setSelectedSort] = useState({name:'популярности', sortProperty:'raiting'})
 
 	useEffect(() => {
-		fetch('https://646cb6e27b42c06c3b2bdaff.mockapi.io/items_pizza')
+		setIsLoading(true)
+		
+		const sortBy = selectedSort.sortProperty.replace('-', '');
+		const order = selectedSort.sortProperty.includes('-') ? 'asc' : 'desc';
+		const category = activeIndexCategory > 0 ? `category=${activeIndexCategory}` : '';
+
+		fetch(`https://646cb6e27b42c06c3b2bdaff.mockapi.io/items_pizza?
+			${category}&sortBy=${sortBy}&order=${order}`)
 		.then(res => res.json())
 		.then(arr => {
 			setItemsPizzas(arr)
 			setIsLoading(false)
 		})
-	}, [])
+		window.scroll(0, 0)
+	}, [activeIndexCategory, selectedSort])
 
 	return (
-		<>
+		<div className="container">
 			<div className="content__top">
-				<Categories />
-				<Sort />
+				<Categories 
+				  activeIndexCategory={activeIndexCategory} 
+					onClickCategory={(index) => setActiveIndexCategory(index)} />
+				<Sort  
+				  selectedSort={selectedSort} 
+					onClickSort={(obj) => setSelectedSort(obj)} />
 			</div>
 			<h2 className="content__title">Все пиццы</h2>
 			<div className="content__items">
@@ -33,7 +47,7 @@ function Home() {
 					: (itemsPizzas.map((obj) => (<PizzaBlock key={obj.id} {...obj} />)))
 				}                
 			</div>
-		</>
+		</div>
 	)
 }
 
