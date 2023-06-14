@@ -1,12 +1,14 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 
 import Categories from '../components/Categories'
 import Sort from '../components/Sort'
 import PizzaBlock from '../components/pizzaBlock/index'
 import PizzaSkeleton from '../components/pizzaBlock/PizzaSkeleton'
+import { SearchContext } from '../App'
 
-function Home({ searchValue }) {
+function Home() {
+	const { searchValue } = useContext(SearchContext)
+
 	const [itemsPizzas, setItemsPizzas] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
 	const [activeIndexCategory, setActiveIndexCategory] = useState(0)
@@ -47,9 +49,7 @@ function Home({ searchValue }) {
 			</div>
 			<h2 className="content__title">Все пиццы</h2>
 			<div className="content__items">
-				{
-					isLoading ? skeletons : pizzas
-				}                
+				{	isLoading ? skeletons : pizzas	}                
 			</div>
 		</div>
 	)
