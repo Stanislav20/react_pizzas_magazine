@@ -1,18 +1,32 @@
 import { useState, useEffect, useContext } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+// useSelector вытаскивает данные из хранилища
+// useDispatch вполняет действия, в данном случает меняет категорию пицц и меняет сортировку пиицц
 
 import Categories from '../components/Categories'
 import Sort from '../components/Sort'
 import PizzaBlock from '../components/pizzaBlock/index'
 import PizzaSkeleton from '../components/pizzaBlock/PizzaSkeleton'
 import { SearchContext } from '../App'
+import { setActiveIndexCategory, setSelectedSort } from '../redux/slices/filterSlice';
 
 function Home() {
-	const { searchValue } = useContext(SearchContext)
-
 	const [itemsPizzas, setItemsPizzas] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
-	const [activeIndexCategory, setActiveIndexCategory] = useState(0)
-	const [selectedSort, setSelectedSort] = useState({name:'популярности', sortProperty:'raiting'})
+
+	const { searchValue } = useContext(SearchContext)
+
+	const activeIndexCategory = useSelector((state) => state.filterReducer.activeIndexCategory)
+	const dispatchFilterPizzas = useDispatch()
+	const onClickCategory = (index) => {
+		dispatchFilterPizzas(setActiveIndexCategory(index))
+	}
+
+	const selectedSort = useSelector((state) => state.filterReducer.selectedSort)
+	const dispatchSortPizzas = useDispatch()
+	const onClickSort = (obj) => {
+		dispatchSortPizzas(setSelectedSort(obj))
+	}
 
 	useEffect(() => {
 		setIsLoading(true)
@@ -42,10 +56,10 @@ function Home() {
 			<div className="content__top">
 				<Categories 
 				  activeIndexCategory={activeIndexCategory} 
-					onClickCategory={(index) => setActiveIndexCategory(index)} />
+					onClickCategory={onClickCategory} />
 				<Sort  
 				  selectedSort={selectedSort} 
-					onClickSort={(obj) => setSelectedSort(obj)} />
+					onClickSort={onClickSort} />
 			</div>
 			<h2 className="content__title">Все пиццы</h2>
 			<div className="content__items">
