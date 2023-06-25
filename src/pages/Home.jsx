@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 // useSelector вытаскивает данные из хранилища
 // useDispatch вполняет действия, в данном случает меняет категорию пицц и меняет сортировку пиицц
+import axios from 'axios'
 
 import Categories from '../components/Categories'
 import Sort from '../components/Sort'
@@ -30,18 +31,15 @@ function Home() {
 
 	useEffect(() => {
 		setIsLoading(true)
-		
 		const sortBy = selectedSort.sortProperty.replace('-', '');
 		const order = selectedSort.sortProperty.includes('-') ? 'asc' : 'desc';
 		const category = activeIndexCategory > 0 ? `category=${activeIndexCategory}` : '';
 
-		fetch(`https://646cb6e27b42c06c3b2bdaff.mockapi.io/items_pizza?
-			${category}&sortBy=${sortBy}&order=${order}`)
-		.then(res => res.json())
-		.then(arr => {
-			setItemsPizzas(arr)
-			setIsLoading(false)
-		})
+    axios.get(`https://646cb6e27b42c06c3b2bdaff.mockapi.io/items_pizza?${category}&sortBy=${sortBy}&order=${order}`)
+			.then((res) => {
+				setItemsPizzas(res.data)
+				setIsLoading(false);
+    });
 		window.scroll(0, 0)
 	}, [activeIndexCategory, selectedSort])
   
