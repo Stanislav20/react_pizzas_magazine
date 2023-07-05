@@ -12,4 +12,4 @@
 
 ⚡ На данный момент не реализована логика добавления пицц в корзину и их отображение в корзине
 
-Посмотреть текущий вариант магазина можно по ссылке: https://stanislav20.github.io/react_pizzas_magazine/
+Посмотреть текущий вариант магазина можно по ссылке: https://stanislav20.github.io/react_pzzas_magazine_for_gh_pages
