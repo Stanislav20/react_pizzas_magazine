@@ -15,7 +15,7 @@ function Sort({ selectedSort, onClickSort }) {
 		onClickSort(obj)
 	}
 
-	const sortRef = useRef('')
+	const sortRef = useRef()
 
   useEffect(()=> {
 		console.log('component mount')
