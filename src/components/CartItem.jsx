@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 // useSelector вытаскивает данные из хранилища
-// useDispatch вполняет действия, в данном случае 
+// useDispatch вполняет действия, в данном случае добавляет, уменьшает и удаляет пиццу в/из корзины.
 import { addItem, minusItem, removeItem } from '../redux/slices/cartSlice';
 
 function CartItem({id, title, price, size, count, imageUrl, type}) {

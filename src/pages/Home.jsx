@@ -1,38 +1,32 @@
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // useSelector вытаскивает данные из хранилища
 // useDispatch вполняет действия, в данном случает меняет категорию пицц и меняет сортировку пиицц
-import axios from 'axios'
 
-import Categories from '../components/Categories'
-import Sort from '../components/Sort'
-import PizzaBlock from '../components/pizzaBlock/index'
-import PizzaSkeleton from '../components/pizzaBlock/PizzaSkeleton'
-import { SearchContext } from '../App'
+import Categories from '../components/Categories';
+import Sort from '../components/Sort';
+import PizzaBlock from '../components/pizzaBlock/index';
+import PizzaSkeleton from '../components/pizzaBlock/PizzaSkeleton';
+import { SearchContext } from '../App';
 import { setActiveIndexCategory, setSelectedSort } from '../redux/slices/filterSlice';
-import { setItemsPizzas } from '../redux/slices/pizzasSlice';
+import { fetchPizzas } from '../redux/slices/pizzasSlice';
 
 function Home() {
-	// const [itemsPizzas, setItemsPizzas] = useState([])
-	const [isLoading, setIsLoading] = useState(true)
 	const dispatch = useDispatch()
 	const { searchValue } = useContext(SearchContext)
-	const itemsPizzas = useSelector((state) => state.pizzasReducer.items)
+	const { items, status } = useSelector((state) => state.pizzasReducer)
 
-	const fetchPizzas = async () => {
-		setIsLoading(true)
+	const getPizzas = async () => {
 		const sortBy = selectedSort.sortProperty.replace('-', '');
 		const order = selectedSort.sortProperty.includes('-') ? 'asc' : 'desc';
 		const category = activeIndexCategory > 0 ? `category=${activeIndexCategory}` : '';
 
-		try {
-			const res = await axios.get(`https://646cb6e27b42c06c3b2bdaff.mockapi.io/items_pizza?${category}&sortBy=${sortBy}&order=${order}`)
-			dispatch(setItemsPizzas(res.data))
-		} catch (error) {
-			console.log("ERROR", error)
-		} finally {
-			setIsLoading(false)
-		}
+		dispatch(fetchPizzas({
+			sortBy,
+			order,
+			category,
+		}))
+		window.scroll(0, 0)
 	}
 
 	const activeIndexCategory = useSelector((state) => state.filterReducer.activeIndexCategory)
@@ -48,13 +42,12 @@ function Home() {
 	}
 
 	useEffect(() => {
-		fetchPizzas()
-		window.scroll(0, 0)
+		getPizzas()
 	}, [activeIndexCategory, selectedSort])
   
-	const pizzas = itemsPizzas
+		const pizzas = items
 		.filter(obj => obj.title.toLowerCase().includes(searchValue.toLowerCase()))
-		.map((obj) => (<PizzaBlock key={obj.id} {...obj} />))
+		.map((obj) => (<PizzaBlock key={obj.id} {...obj} />))	
 
 	const skeletons = [...new Array(6)].map((_, i) => <PizzaSkeleton key={i} />)
 
@@ -69,9 +62,13 @@ function Home() {
 					onClickSort={onClickSort} />
 			</div>
 			<h2 className="content__title">Все пиццы</h2>
-			<div className="content__items">
-				{	isLoading ? skeletons : pizzas	}                
-			</div>
+			{status === 'error'
+				? (<div className='content__error'>
+						<h2>Произошла ошибка 😕</h2>
+						<p>К сожалению не удалось загрузить пиццы. Повторите попытку позже</p>
+					</div>
+				) : (<div className="content__items">{status === 'loading' ? skeletons : pizzas}</div>)
+			}   
 		</div>
 	)
 }

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 // useSelector вытаскивает данные из хранилища
-// useDispatch вполняет действия, в данном случае 
+// useDispatch вполняет действия, в данном случае ф-ей clearItem полностью очищает корзину
 import CartItem from '../components/CartItem';
 import { clearItem } from '../redux/slices/cartSlice';
 import CartEmpty from "../components/CartEmpty";

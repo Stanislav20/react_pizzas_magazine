@@ -46,6 +46,16 @@ body {
 		}
   }
 
+	&__error {
+		max-width: 400px;
+		text-align: center;
+		margin: 0 auto;
+		padding-bottom: 50px;
+		p {
+			font-size: 20px;
+		}
+	}
+
   &__top {
     display: flex;
     align-items: center;

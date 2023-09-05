@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // useSelector вытаскивает данные из хранилища
-// useDispatch вполняет действия, в данном случае 
+// useDispatch вполняет действия, в данном случае добавляет пиццу в корзину
 import { addItem } from '../../redux/slices/cartSlice';
 
 const typePizza = ['Тонкое', 'Традиционное'];
