@@ -1,7 +1,8 @@
 import React from "react"
 import ContentLoader from "react-content-loader"
 
-const MyLoader = () => (
+
+export const PizzaLoader = () => (
   <ContentLoader className='pizza-block'
     speed={2}
     width={280}
@@ -17,5 +18,3 @@ const MyLoader = () => (
     <rect x="125" y="427" rx="24" ry="24" width="152" height="45" />
   </ContentLoader>
 )
-
-export default MyLoader
